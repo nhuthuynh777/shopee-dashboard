@@ -1,8 +1,6 @@
 import streamlit as st
 import pandas as pd
-import matplotlib
-matplotlib.use("Agg")
-import matplotlib.pyplot as plt
+import plotly.graph_objects as go
 import numpy as np
 import re
 
@@ -148,36 +146,96 @@ def fmt_num(val):
         return f"{val/1_000:.1f}K"
     return f"{val:,.0f}"
 
-def _mpl(n_items=1, height_per_item=0.45, min_h=3.0, max_h=9.0):
-    """Dark-themed matplotlib figure for horizontal bar charts."""
-    h = max(min_h, min(max_h, n_items * height_per_item))
-    fig, ax = plt.subplots(figsize=(9, h))
-    fig.patch.set_facecolor("#1e2235")
-    ax.set_facecolor("#1e2235")
-    ax.tick_params(colors="#c0c8d8", labelsize=9)
-    ax.xaxis.label.set_color("#c0c8d8")
-    ax.yaxis.label.set_color("#c0c8d8")
-    for spine in ax.spines.values():
-        spine.set_edgecolor("#2d3149")
-    ax.grid(axis="x", color="#2d3149", linewidth=0.5, zorder=0)
-    return fig, ax
+# ─── PLOTLY CHART HELPERS ─────────────────────────────────────────────────────
+CHART_H = 350
 
-def _mpl_pie():
-    """Dark-themed matplotlib figure for pie/donut charts."""
-    fig, ax = plt.subplots(figsize=(5, 4))
-    fig.patch.set_facecolor("#1e2235")
-    ax.set_facecolor("#1e2235")
-    return fig, ax
+def _ly(**kw):
+    """Base dark layout for all plotly bar/scatter charts."""
+    base = dict(
+        paper_bgcolor="#1e2235",
+        plot_bgcolor="#1e2235",
+        font=dict(color="#c0c8d8", size=11),
+        height=CHART_H,
+        margin=dict(l=10, r=120, t=30, b=40),
+        legend=dict(
+            bgcolor="rgba(0,0,0,0)",
+            bordercolor="#2d3149",
+            borderwidth=1,
+            font=dict(color="#e0e0e0"),
+        ),
+        xaxis=dict(
+            gridcolor="#2d3149",
+            linecolor="#2d3149",
+            zerolinecolor="#2d3149",
+            tickfont=dict(color="#c0c8d8"),
+        ),
+        yaxis=dict(
+            gridcolor="#2d3149",
+            linecolor="#2d3149",
+            tickfont=dict(color="#c0c8d8"),
+        ),
+    )
+    base.update(kw)
+    return base
 
-COLORS = {
-    "cyan": "#00d4ff",
-    "green": "#00ff88",
-    "yellow": "#ffd700",
-    "orange": "#ff8c00",
-    "red": "#ff4444",
-    "purple": "#9b59b6",
-    "blue": "#3498db",
-}
+def _ly_pie(**kw):
+    """Dark layout for pie/donut charts."""
+    base = dict(
+        paper_bgcolor="#1e2235",
+        plot_bgcolor="#1e2235",
+        font=dict(color="#e0e0e0", size=10),
+        height=CHART_H,
+        margin=dict(l=10, r=10, t=40, b=10),
+        legend=dict(bgcolor="rgba(0,0,0,0)", font=dict(color="#e0e0e0")),
+        showlegend=True,
+    )
+    base.update(kw)
+    return base
+
+def _hbar(y, x, colors, texts, xaxis_title="", vlines=None):
+    """Horizontal bar chart with outside text labels."""
+    if isinstance(colors, str):
+        colors = [colors] * len(x)
+    mx = max(x) if len(x) > 0 else 1
+    fig = go.Figure(go.Bar(
+        x=list(x), y=list(y),
+        orientation="h",
+        marker_color=colors,
+        text=texts,
+        textposition="outside",
+        textfont=dict(color="#e0e0e0", size=9),
+        cliponaxis=False,
+        hovertemplate="%{y}<br>" + xaxis_title + ": %{text}<extra></extra>",
+    ))
+    fig.update_layout(**_ly(xaxis_title=xaxis_title))
+    fig.update_xaxes(range=[0, mx * 1.40])
+    return fig
+
+def styled_table(df):
+    """Render a DataFrame as a dark-themed HTML table."""
+    header = "".join(
+        f'<th style="background:#1a2744;color:#00d4ff;padding:10px 16px;'
+        f'text-align:left;font-size:12px;font-weight:700;'
+        f'border-bottom:2px solid #2d4a6b;white-space:nowrap;">{col}</th>'
+        for col in df.columns
+    )
+    body = ""
+    for i, (_, row) in enumerate(df.iterrows()):
+        bg = "#1e2235" if i % 2 == 0 else "#252a3d"
+        cells = "".join(
+            f'<td style="padding:9px 16px;font-size:13px;color:#e0e0e0;'
+            f'border-bottom:1px solid #2d3149;">{val}</td>'
+            for val in row
+        )
+        body += f'<tr style="background:{bg};">{cells}</tr>'
+    return (
+        '<div style="overflow-x:auto;border-radius:8px;border:1px solid #2d3149;margin-bottom:16px;">'
+        f'<table style="width:100%;border-collapse:collapse;">'
+        f'<thead><tr>{header}</tr></thead>'
+        f'<tbody>{body}</tbody>'
+        '</table></div>'
+    )
+
 
 ROAS_TIERS = [
     ("🔴 Losing", "#ff4444", 0, 1.0),
@@ -193,10 +251,8 @@ def get_roas_tier(roas):
     return "⭐ Excellent", "#00d4ff"
 
 def load_files(uploaded_files):
-    """Load and combine multiple Excel files."""
     all_campaigns = []
     all_keywords = []
-
     for f in uploaded_files:
         try:
             xl = pd.ExcelFile(f)
@@ -210,53 +266,38 @@ def load_files(uploaded_files):
                 all_keywords.append(dfk)
         except Exception as e:
             st.sidebar.warning(f"Lỗi đọc file {f.name}: {e}")
-
     df_camp = pd.concat(all_campaigns, ignore_index=True) if all_campaigns else pd.DataFrame()
     df_kw = pd.concat(all_keywords, ignore_index=True) if all_keywords else pd.DataFrame()
     return df_camp, df_kw
 
 def clean_campaigns(df):
-    """Clean and prepare campaign-level data."""
     if df.empty:
         return df
-
-    # Numeric cols
     num_cols = ["Impression", "Clicks", "Expense", "GMV", "ROAS", "ACOS",
                 "Items Sold", "Conversions", "Direct GMV", "Direct ROAS",
                 "Direct ACOS", "Direct Items Sold"]
     for col in num_cols:
         if col in df.columns:
             df[col] = pd.to_numeric(df[col], errors="coerce").fillna(0)
-
-    # Convert THB → VND
     for col in ["Expense", "GMV", "Direct GMV"]:
         if col in df.columns:
             df[f"{col}_VND"] = df[col] * THB_TO_VND
-
-    # CTR clean
     if "CTR" in df.columns:
         df["CTR_pct"] = df["CTR"].astype(str).str.replace("%", "").str.strip()
         df["CTR_pct"] = pd.to_numeric(df["CTR_pct"], errors="coerce").fillna(0)
-
     if "ACOS" in df.columns:
         df["ACOS_pct"] = df["ACOS"].astype(str).str.replace("%", "").str.strip()
         df["ACOS_pct"] = pd.to_numeric(df["ACOS_pct"], errors="coerce").fillna(0)
-
-    # Ad type
     if "Campaign" in df.columns:
         df["Ad_Type"] = df["Campaign"].apply(
             lambda x: "Shop Ad" if "Shop Ad" in str(x) else "Product Ad"
         )
-
-    # ROAS tier
     if "ROAS" in df.columns:
         df["ROAS_Tier"] = df["ROAS"].apply(lambda x: get_roas_tier(x)[0])
         df["ROAS_Color"] = df["ROAS"].apply(lambda x: get_roas_tier(x)[1])
-
     return df
 
 def get_campaign_summary(df):
-    """Aggregate to campaign level (not product level)."""
     if df.empty:
         return df
     agg = df.groupby("Campaign", as_index=False).agg(
@@ -287,7 +328,6 @@ with st.sidebar:
     st.markdown("## 🛍️ VSTu Analytics")
     st.markdown("Digital Marketing Dashboard")
     st.markdown("---")
-
     st.markdown("### 📂 Upload Raw Data")
     uploaded_files = st.file_uploader(
         "Shopee Ads Export (.xlsx)",
@@ -295,14 +335,11 @@ with st.sidebar:
         accept_multiple_files=True,
         help="Upload file export từ Shopee Ads. Có thể upload nhiều file cùng lúc (nhiều tháng)."
     )
-
     st.markdown("---")
-
     if uploaded_files:
         st.markdown(f"**{len(uploaded_files)} file đã tải:**")
         for f in uploaded_files:
             st.markdown(f"• {f.name}")
-
     st.markdown("---")
     st.markdown(f"**💱 Tỷ giá:** 1 THB = {THB_TO_VND:,} VNĐ")
     st.caption("Nguồn: Google")
@@ -322,7 +359,6 @@ if not uploaded_files:
     """, unsafe_allow_html=True)
     st.stop()
 
-# Load data
 with st.spinner("Đang đọc data..."):
     df_raw, df_kw_raw = load_files(uploaded_files)
     df = clean_campaigns(df_raw.copy())
@@ -373,76 +409,57 @@ with tab1:
         st.markdown("### GMV by Campaign (VNĐ)")
         camp_gmv = df_camp[df_camp["GMV_VND"] > 0].sort_values("GMV_VND", ascending=True)
         if not camp_gmv.empty:
-            fig, ax = _mpl(len(camp_gmv))
-            bars = ax.barh(camp_gmv["Campaign"], camp_gmv["GMV_VND"],
-                           color="#00d4ff", height=0.6)
-            ax.set_xlabel("GMV (VNĐ)", color="#c0c8d8")
-            mx = camp_gmv["GMV_VND"].max()
-            ax.set_xlim(right=mx * 1.30)
-            for bar, val in zip(bars, camp_gmv["GMV_VND"]):
-                ax.text(bar.get_width() + mx * 0.01,
-                        bar.get_y() + bar.get_height() / 2,
-                        fmt_vnd(val), va="center", ha="left",
-                        color="#e0e0e0", fontsize=8)
-            plt.tight_layout()
-            st.pyplot(fig, use_container_width=True)
-            plt.close(fig)
+            fig = _hbar(
+                y=camp_gmv["Campaign"],
+                x=camp_gmv["GMV_VND"],
+                colors="#00d4ff",
+                texts=[fmt_vnd(v) for v in camp_gmv["GMV_VND"]],
+                xaxis_title="GMV (VNĐ)",
+            )
+            st.plotly_chart(fig, use_container_width=True, key="t1_gmv_campaign")
 
     with col2:
         st.markdown("### ROAS by Campaign")
         camp_roas = df_camp[df_camp["ROAS"] > 0].sort_values("ROAS", ascending=True)
         if not camp_roas.empty:
-            fig, ax = _mpl(len(camp_roas))
-            bars = ax.barh(camp_roas["Campaign"], camp_roas["ROAS"],
-                           color=camp_roas["ROAS_Color"].tolist(), height=0.6)
-            ax.axvline(x=3.0, color="#00ff88", linestyle="--", linewidth=1.2, label="ROAS=3.0")
-            ax.axvline(x=1.0, color="#ff4444", linestyle="--", linewidth=1.2, label="ROAS=1.0")
-            ax.set_xlabel("ROAS", color="#c0c8d8")
-            mx = camp_roas["ROAS"].max()
-            ax.set_xlim(right=mx * 1.25)
-            for bar, val in zip(bars, camp_roas["ROAS"]):
-                ax.text(bar.get_width() + mx * 0.01,
-                        bar.get_y() + bar.get_height() / 2,
-                        f"{val:.2f}x", va="center", ha="left",
-                        color="#e0e0e0", fontsize=8)
-            ax.legend(facecolor="#1e2235", edgecolor="#2d3149",
-                      labelcolor="#e0e0e0", fontsize=8)
-            plt.tight_layout()
-            st.pyplot(fig, use_container_width=True)
-            plt.close(fig)
+            fig = _hbar(
+                y=camp_roas["Campaign"],
+                x=camp_roas["ROAS"],
+                colors=camp_roas["ROAS_Color"].tolist(),
+                texts=[f"{v:.2f}x" for v in camp_roas["ROAS"]],
+                xaxis_title="ROAS",
+            )
+            fig.add_vline(x=3.0, line_dash="dash", line_color="#00ff88",
+                          annotation_text="ROAS=3.0", annotation_font_color="#00ff88",
+                          annotation_position="top right")
+            fig.add_vline(x=1.0, line_dash="dash", line_color="#ff4444",
+                          annotation_text="ROAS=1.0", annotation_font_color="#ff4444",
+                          annotation_position="top right")
+            st.plotly_chart(fig, use_container_width=True, key="t1_roas_campaign")
 
     # Spend vs GMV scatter
     st.markdown("### Spend vs GMV by Campaign")
     valid = df_camp[df_camp["Expense_VND"] > 0]
     if not valid.empty:
-        tier_color_map_t1 = {
-            "🔴 Losing": "#ff4444",
-            "🟡 Below avg": "#ffd700",
-            "🟢 Good": "#00ff88",
-            "⭐ Excellent": "#00d4ff",
-        }
-        fig, ax = _mpl(min_h=5.0)
+        tier_colors = {t[0]: t[1] for t in ROAS_TIERS}
         max_imp = valid["Impressions"].max() if valid["Impressions"].max() > 0 else 1
-        for tier, color in tier_color_map_t1.items():
+        fig = go.Figure()
+        for tier, color in tier_colors.items():
             sub = valid[valid["ROAS_Tier"] == tier]
             if not sub.empty:
-                sz = (sub["Impressions"] / max_imp * 600).clip(30, 600)
-                ax.scatter(sub["Expense_VND"], sub["GMV_VND"],
-                           s=sz, c=color, label=tier, alpha=0.85,
-                           edgecolors="#1e2235", linewidth=0.5)
-        for _, row in valid.iterrows():
-            ax.annotate(row["Campaign"][:25], (row["Expense_VND"], row["GMV_VND"]),
-                        fontsize=7, color="#b0c4de",
-                        xytext=(4, 4), textcoords="offset points")
-        ax.set_xlabel("Spend (VNĐ)", color="#c0c8d8")
-        ax.set_ylabel("GMV (VNĐ)", color="#c0c8d8")
-        ax.legend(facecolor="#1e2235", edgecolor="#2d3149",
-                  labelcolor="#e0e0e0", fontsize=9)
-        plt.tight_layout()
-        st.pyplot(fig, use_container_width=True)
-        plt.close(fig)
+                sz = (sub["Impressions"] / max_imp * 35 + 8).clip(8, 40)
+                fig.add_trace(go.Scatter(
+                    x=sub["Expense_VND"], y=sub["GMV_VND"],
+                    mode="markers",
+                    name=tier,
+                    marker=dict(size=sz.tolist(), color=color, opacity=0.85,
+                                line=dict(color="#1e2235", width=0.5)),
+                    text=sub["Campaign"].str[:30],
+                    hovertemplate="<b>%{text}</b><br>Spend: %{x:,.0f} ₫<br>GMV: %{y:,.0f} ₫<extra></extra>",
+                ))
+        fig.update_layout(**_ly(xaxis_title="Spend (VNĐ)", yaxis_title="GMV (VNĐ)"))
+        st.plotly_chart(fig, use_container_width=True, key="t1_spend_gmv_scatter")
 
-    # Quick insight
     top_camp = df_camp.loc[df_camp["GMV_VND"].idxmax(), "Campaign"] if not df_camp.empty else "-"
     losing = df_camp[df_camp["ROAS"] < 1.0]
     st.markdown(f"""
@@ -473,39 +490,32 @@ with tab2:
 
         with col1:
             st.markdown("#### Top 15 by Impressions")
-            top_imp = prod_df.nlargest(15, "Impression")
-            fig, ax = _mpl(len(top_imp))
-            ax.barh(top_imp["Ad / Product Name"].str[:50], top_imp["Impression"],
-                    color="#00d4ff", height=0.6)
-            ax.set_xlabel("Impressions", color="#c0c8d8")
-            plt.tight_layout()
-            st.pyplot(fig, use_container_width=True)
-            plt.close(fig)
+            top_imp = prod_df.nlargest(15, "Impression").sort_values("Impression", ascending=True)
+            fig = _hbar(
+                y=top_imp["Ad / Product Name"].str[:50],
+                x=top_imp["Impression"],
+                colors="#00d4ff",
+                texts=[fmt_num(v) for v in top_imp["Impression"]],
+                xaxis_title="Impressions",
+            )
+            st.plotly_chart(fig, use_container_width=True, key="t2_top_impressions")
 
         with col2:
             st.markdown("#### CTR by Product (Top 15 by Impressions)")
             med_ctr = prod_df["CTR_pct"].median()
-            top_imp2 = prod_df.nlargest(15, "Impression").sort_values("CTR_pct")
-            colors_ctr = ["#ff4444" if v < med_ctr else "#00d4ff"
-                          for v in top_imp2["CTR_pct"]]
-            fig, ax = _mpl(len(top_imp2))
-            bars = ax.barh(top_imp2["Ad / Product Name"].str[:50], top_imp2["CTR_pct"],
-                           color=colors_ctr, height=0.6)
-            ax.axvline(x=med_ctr, color="#ffd700", linestyle="--", linewidth=1.2,
-                       label=f"Median {med_ctr:.2f}%")
-            ax.set_xlabel("CTR (%)", color="#c0c8d8")
-            mx_ctr = top_imp2["CTR_pct"].max() if top_imp2["CTR_pct"].max() > 0 else 1
-            ax.set_xlim(right=mx_ctr * 1.30)
-            for bar, val in zip(bars, top_imp2["CTR_pct"]):
-                ax.text(bar.get_width() + mx_ctr * 0.01,
-                        bar.get_y() + bar.get_height() / 2,
-                        f"{val:.2f}%", va="center", ha="left",
-                        color="#e0e0e0", fontsize=8)
-            ax.legend(facecolor="#1e2235", edgecolor="#2d3149",
-                      labelcolor="#e0e0e0", fontsize=8)
-            plt.tight_layout()
-            st.pyplot(fig, use_container_width=True)
-            plt.close(fig)
+            top_imp2 = prod_df.nlargest(15, "Impression").sort_values("CTR_pct", ascending=True)
+            colors_ctr = ["#ff4444" if v < med_ctr else "#00d4ff" for v in top_imp2["CTR_pct"]]
+            fig = _hbar(
+                y=top_imp2["Ad / Product Name"].str[:50],
+                x=top_imp2["CTR_pct"],
+                colors=colors_ctr,
+                texts=[f"{v:.2f}%" for v in top_imp2["CTR_pct"]],
+                xaxis_title="CTR (%)",
+            )
+            fig.add_vline(x=med_ctr, line_dash="dash", line_color="#ffd700",
+                          annotation_text=f"Median {med_ctr:.2f}%", annotation_font_color="#ffd700",
+                          annotation_position="top right")
+            st.plotly_chart(fig, use_container_width=True, key="t2_ctr_product")
 
         # Opportunity table
         st.markdown("### 🎯 Cơ hội: Impression cao nhưng CTR thấp")
@@ -518,36 +528,31 @@ with tab2:
             ["Ad / Product Name", "Impression", "CTR_pct", "Clicks"]
         ].head(10)
         opps.columns = ["Product", "Impressions", "CTR (%)", "Clicks"]
-        st.dataframe(opps, hide_index=True)
+        st.markdown(styled_table(opps), unsafe_allow_html=True)
 
         # Product performance — sales & revenue
         st.markdown("### 📦 Product Performance — Sales & Revenue")
         prod_rev = prod_df[prod_df["GMV_VND"] > 0].sort_values("GMV_VND", ascending=True).tail(15)
-        fig, ax = _mpl(len(prod_rev))
-        bars = ax.barh(prod_rev["Ad / Product Name"].str[:55], prod_rev["GMV_VND"],
-                       color="#00ff88", height=0.6)
-        ax.set_xlabel("GMV (VNĐ)", color="#c0c8d8")
-        mx_rev = prod_rev["GMV_VND"].max()
-        ax.set_xlim(right=mx_rev * 1.30)
-        for bar, val in zip(bars, prod_rev["GMV_VND"]):
-            ax.text(bar.get_width() + mx_rev * 0.01,
-                    bar.get_y() + bar.get_height() / 2,
-                    fmt_vnd(val), va="center", ha="left",
-                    color="#e0e0e0", fontsize=8)
-        plt.tight_layout()
-        st.pyplot(fig, use_container_width=True)
-        plt.close(fig)
+        fig = _hbar(
+            y=prod_rev["Ad / Product Name"].str[:55],
+            x=prod_rev["GMV_VND"],
+            colors="#00ff88",
+            texts=[fmt_vnd(v) for v in prod_rev["GMV_VND"]],
+            xaxis_title="GMV (VNĐ)",
+        )
+        st.plotly_chart(fig, use_container_width=True, key="t2_product_sales")
 
         # Top 15 by units sold
         st.markdown("### 📦 Top 15 Products by Units Sold")
-        top_units = prod_df[prod_df["Items Sold"] > 0].nlargest(15, "Items Sold").sort_values("Items Sold")
-        fig, ax = _mpl(len(top_units))
-        ax.barh(top_units["Ad / Product Name"].str[:55], top_units["Items Sold"],
-                color="#ffd700", height=0.6)
-        ax.set_xlabel("Units Sold", color="#c0c8d8")
-        plt.tight_layout()
-        st.pyplot(fig, use_container_width=True)
-        plt.close(fig)
+        top_units = prod_df[prod_df["Items Sold"] > 0].nlargest(15, "Items Sold").sort_values("Items Sold", ascending=True)
+        fig = _hbar(
+            y=top_units["Ad / Product Name"].str[:55],
+            x=top_units["Items Sold"],
+            colors="#ffd700",
+            texts=[fmt_num(v) for v in top_units["Items Sold"]],
+            xaxis_title="Units Sold",
+        )
+        st.plotly_chart(fig, use_container_width=True, key="t2_units_sold")
 
         # Full product table
         st.markdown("### 📋 Full Product Performance Table")
@@ -559,9 +564,8 @@ with tab2:
         tbl["Spend (VNĐ)"] = tbl["Spend (VNĐ)"].apply(fmt_vnd)
         tbl["ROAS"] = tbl["ROAS"].apply(lambda x: f"{x:.2f}x")
         tbl["CTR (%)"] = tbl["CTR (%)"].apply(lambda x: f"{x:.2f}%")
-        st.dataframe(tbl, hide_index=True)
+        st.markdown(styled_table(tbl), unsafe_allow_html=True)
 
-        # Quick insight
         top_prod = prod_df.loc[prod_df["GMV_VND"].idxmax(), "Ad / Product Name"] if not prod_df.empty else "-"
         low_ctr_prods = len(prod_df[(prod_df["Impression"] > med_imp) & (prod_df["CTR_pct"] < med_ctr)])
         st.markdown(f"""
@@ -581,7 +585,6 @@ with tab2:
 with tab3:
     st.markdown("## 📊 Onsite Ads Performance")
 
-    # KPI row
     total_spend = df["Expense_VND"].sum()
     total_gmv = df["GMV_VND"].sum()
     overall_roas = total_gmv / total_spend if total_spend > 0 else 0
@@ -611,7 +614,7 @@ with tab3:
     tbl2["ROAS"] = tbl2["ROAS"].apply(lambda x: f"{x:.2f}x")
     tbl2["CTR (%)"] = tbl2["CTR (%)"].apply(lambda x: f"{x:.2f}%")
     tbl2["ACOS (%)"] = tbl2["ACOS (%)"].apply(lambda x: f"{x:.1f}%")
-    st.dataframe(tbl2, hide_index=True)
+    st.markdown(styled_table(tbl2), unsafe_allow_html=True)
 
     st.markdown("---")
 
@@ -620,73 +623,61 @@ with tab3:
         st.markdown("### GMV by Campaign (VNĐ)")
         camp_sorted = df_camp[df_camp["GMV_VND"] > 0].sort_values("GMV_VND", ascending=True)
         if not camp_sorted.empty:
-            fig, ax = _mpl(len(camp_sorted))
-            bars = ax.barh(camp_sorted["Campaign"], camp_sorted["GMV_VND"],
-                           color="#00d4ff", height=0.6)
-            ax.set_xlabel("GMV (VNĐ)", color="#c0c8d8")
-            mx = camp_sorted["GMV_VND"].max()
-            ax.set_xlim(right=mx * 1.30)
-            for bar, val in zip(bars, camp_sorted["GMV_VND"]):
-                ax.text(bar.get_width() + mx * 0.01,
-                        bar.get_y() + bar.get_height() / 2,
-                        fmt_vnd(val), va="center", ha="left",
-                        color="#e0e0e0", fontsize=8)
-            plt.tight_layout()
-            st.pyplot(fig, use_container_width=True)
-            plt.close(fig)
+            fig = _hbar(
+                y=camp_sorted["Campaign"],
+                x=camp_sorted["GMV_VND"],
+                colors="#00d4ff",
+                texts=[fmt_vnd(v) for v in camp_sorted["GMV_VND"]],
+                xaxis_title="GMV (VNĐ)",
+            )
+            st.plotly_chart(fig, use_container_width=True, key="t3_gmv_campaign")
 
     with col2:
         st.markdown("### ROAS by Campaign")
         roas_sorted = df_camp[df_camp["ROAS"] > 0].sort_values("ROAS", ascending=True)
         if not roas_sorted.empty:
-            fig, ax = _mpl(len(roas_sorted))
-            bars = ax.barh(roas_sorted["Campaign"], roas_sorted["ROAS"],
-                           color=roas_sorted["ROAS_Color"].tolist(), height=0.6)
-            ax.axvline(x=3.0, color="#00ff88", linestyle="--", linewidth=1.2, label="ROAS=3.0")
-            ax.axvline(x=1.0, color="#ff4444", linestyle="--", linewidth=1.2, label="ROAS=1.0")
-            ax.set_xlabel("ROAS", color="#c0c8d8")
-            mx = roas_sorted["ROAS"].max()
-            ax.set_xlim(right=mx * 1.25)
-            for bar, val in zip(bars, roas_sorted["ROAS"]):
-                ax.text(bar.get_width() + mx * 0.01,
-                        bar.get_y() + bar.get_height() / 2,
-                        f"{val:.2f}x", va="center", ha="left",
-                        color="#e0e0e0", fontsize=8)
-            ax.legend(facecolor="#1e2235", edgecolor="#2d3149",
-                      labelcolor="#e0e0e0", fontsize=8)
-            plt.tight_layout()
-            st.pyplot(fig, use_container_width=True)
-            plt.close(fig)
+            fig = _hbar(
+                y=roas_sorted["Campaign"],
+                x=roas_sorted["ROAS"],
+                colors=roas_sorted["ROAS_Color"].tolist(),
+                texts=[f"{v:.2f}x" for v in roas_sorted["ROAS"]],
+                xaxis_title="ROAS",
+            )
+            fig.add_vline(x=3.0, line_dash="dash", line_color="#00ff88",
+                          annotation_text="ROAS=3.0", annotation_font_color="#00ff88",
+                          annotation_position="top right")
+            fig.add_vline(x=1.0, line_dash="dash", line_color="#ff4444",
+                          annotation_text="ROAS=1.0", annotation_font_color="#ff4444",
+                          annotation_position="top right")
+            st.plotly_chart(fig, use_container_width=True, key="t3_roas_campaign")
 
-    # CTR vs ROAS scatter
+    # CTR vs ROAS bubble
     st.markdown("### CTR vs ROAS — bubble size = Spend")
     bubble_df = df_camp[df_camp["Expense_VND"] > 0]
     if not bubble_df.empty:
-        tier_color_map_t3 = {
-            "🔴 Losing": "#ff4444",
-            "🟡 Below avg": "#ffd700",
-            "🟢 Good": "#00ff88",
-            "⭐ Excellent": "#00d4ff",
-        }
-        fig, ax = _mpl(min_h=5.0)
+        tier_colors = {t[0]: t[1] for t in ROAS_TIERS}
         max_spend = bubble_df["Expense_VND"].max() if bubble_df["Expense_VND"].max() > 0 else 1
-        for tier, color in tier_color_map_t3.items():
+        fig = go.Figure()
+        for tier, color in tier_colors.items():
             sub = bubble_df[bubble_df["ROAS_Tier"] == tier]
             if not sub.empty:
-                sz = (sub["Expense_VND"] / max_spend * 600).clip(30, 600)
-                ax.scatter(sub["CTR"], sub["ROAS"], s=sz, c=color, label=tier,
-                           alpha=0.85, edgecolors="#1e2235", linewidth=0.5)
-        ax.axhline(y=3.0, color="#00ff88", linestyle="--", linewidth=1.2, label="ROAS=3.0")
-        ax.axhline(y=1.0, color="#ff4444", linestyle="--", linewidth=1.2, label="ROAS=1.0")
-        ax.set_xlabel("CTR (%)", color="#c0c8d8")
-        ax.set_ylabel("ROAS", color="#c0c8d8")
-        ax.legend(facecolor="#1e2235", edgecolor="#2d3149",
-                  labelcolor="#e0e0e0", fontsize=9)
-        plt.tight_layout()
-        st.pyplot(fig, use_container_width=True)
-        plt.close(fig)
+                sz = (sub["Expense_VND"] / max_spend * 35 + 8).clip(8, 40)
+                fig.add_trace(go.Scatter(
+                    x=sub["CTR"], y=sub["ROAS"],
+                    mode="markers",
+                    name=tier,
+                    marker=dict(size=sz.tolist(), color=color, opacity=0.85,
+                                line=dict(color="#1e2235", width=0.5)),
+                    text=sub["Campaign"].str[:30],
+                    hovertemplate="<b>%{text}</b><br>CTR: %{x:.2f}%<br>ROAS: %{y:.2f}x<extra></extra>",
+                ))
+        fig.add_hline(y=3.0, line_dash="dash", line_color="#00ff88",
+                      annotation_text="ROAS=3.0", annotation_font_color="#00ff88")
+        fig.add_hline(y=1.0, line_dash="dash", line_color="#ff4444",
+                      annotation_text="ROAS=1.0", annotation_font_color="#ff4444")
+        fig.update_layout(**_ly(xaxis_title="CTR (%)", yaxis_title="ROAS"))
+        st.plotly_chart(fig, use_container_width=True, key="t3_ctr_roas_bubble")
 
-    # Quick insight
     top_roas_camp = df_camp.loc[df_camp["ROAS"].idxmax()] if not df_camp.empty else None
     st.markdown(f"""
     <div class="quick-insight">
@@ -714,9 +705,8 @@ with tab4:
         {"Tier": "🟢 Good", "ROAS": "3.0 – 5.0x", "Đánh giá": "Hiệu quả tốt"},
         {"Tier": "⭐ Excellent", "ROAS": "> 5.0x", "Đánh giá": "Scale aggressively"},
     ])
-    st.dataframe(tier_table, hide_index=True)
+    st.markdown(styled_table(tier_table), unsafe_allow_html=True)
 
-    # Campaign ROAS table
     roas_tbl = df_camp[["Campaign", "Ad_Status", "Expense_VND", "ROAS", "ROAS_Tier", "ACOS", "CTR"]].copy()
     roas_tbl = roas_tbl.rename(columns={"Ad_Status": "Status", "Expense_VND": "Spend (VNĐ)",
                                          "ROAS_Tier": "ROAS Tier"})
@@ -731,29 +721,19 @@ with tab4:
         # ROAS tier donut
         tier_counts = df_camp["ROAS_Tier"].value_counts().reset_index()
         tier_counts.columns = ["Tier", "Count"]
-        tier_color_map_t4 = {t[0]: t[1] for t in ROAS_TIERS}
-        colors_donut = [tier_color_map_t4.get(t, "#888") for t in tier_counts["Tier"]]
-        fig, ax = _mpl_pie()
-        wedges, texts, autotexts = ax.pie(
-            tier_counts["Count"], labels=tier_counts["Tier"],
-            colors=colors_donut, autopct="%1.0f%%",
-            pctdistance=0.75, startangle=90,
-            wedgeprops=dict(width=0.5, edgecolor="#1e2235")
-        )
-        for t in texts:
-            t.set_color("#e0e0e0")
-            t.set_fontsize(9)
-        for at in autotexts:
-            at.set_color("#0e1117")
-            at.set_fontweight("bold")
-            at.set_fontsize(9)
-        ax.set_title("# Campaigns by ROAS Tier", color="#e0e0e0", fontsize=11)
-        plt.tight_layout()
-        st.pyplot(fig, use_container_width=True)
-        plt.close(fig)
+        tier_color_map = {t[0]: t[1] for t in ROAS_TIERS}
+        donut_colors = [tier_color_map.get(t, "#888") for t in tier_counts["Tier"]]
+        fig = go.Figure(go.Pie(
+            values=tier_counts["Count"],
+            labels=tier_counts["Tier"],
+            hole=0.5,
+            marker=dict(colors=donut_colors, line=dict(color="#1e2235", width=2)),
+            textfont=dict(color="#e0e0e0", size=10),
+        ))
+        fig.update_layout(**_ly_pie(title=dict(text="# Campaigns by ROAS Tier", font=dict(color="#e0e0e0", size=12))))
+        st.plotly_chart(fig, use_container_width=True, key="t4_roas_tier_donut")
 
     with col2:
-        # Campaigns cần chú ý
         losing = df_camp[df_camp["ROAS"] < 1.0]
         if not losing.empty:
             st.markdown("**❌ Campaigns đang lỗ (cần Pause/Review):**")
@@ -780,23 +760,17 @@ with tab4:
     if not acos_sorted.empty:
         colors_acos = ["#00ff88" if v < 30 else "#ffd700" if v < 50 else "#ff4444"
                        for v in acos_sorted["ACOS"]]
-        fig, ax = _mpl(len(acos_sorted))
-        bars = ax.barh(acos_sorted["Campaign"], acos_sorted["ACOS"],
-                       color=colors_acos, height=0.6)
-        ax.axvline(x=30, color="#ffd700", linestyle="--", linewidth=1.2, label="30% threshold")
-        ax.set_xlabel("ACOS (%)", color="#c0c8d8")
-        mx_acos = acos_sorted["ACOS"].max()
-        ax.set_xlim(right=mx_acos * 1.25)
-        for bar, val in zip(bars, acos_sorted["ACOS"]):
-            ax.text(bar.get_width() + mx_acos * 0.01,
-                    bar.get_y() + bar.get_height() / 2,
-                    f"{val:.1f}%", va="center", ha="left",
-                    color="#e0e0e0", fontsize=8)
-        ax.legend(facecolor="#1e2235", edgecolor="#2d3149",
-                  labelcolor="#e0e0e0", fontsize=8)
-        plt.tight_layout()
-        st.pyplot(fig, use_container_width=True)
-        plt.close(fig)
+        fig = _hbar(
+            y=acos_sorted["Campaign"],
+            x=acos_sorted["ACOS"],
+            colors=colors_acos,
+            texts=[f"{v:.1f}%" for v in acos_sorted["ACOS"]],
+            xaxis_title="ACOS (%)",
+        )
+        fig.add_vline(x=30, line_dash="dash", line_color="#ffd700",
+                      annotation_text="30% threshold", annotation_font_color="#ffd700",
+                      annotation_position="top right")
+        st.plotly_chart(fig, use_container_width=True, key="t4_acos_analysis")
 
     st.markdown("---")
 
@@ -806,44 +780,29 @@ with tab4:
     with col1:
         status_count = df_camp["Ad_Status"].value_counts().reset_index()
         status_count.columns = ["Status", "Count"]
-        status_colors = [COLORS["cyan"], COLORS["yellow"], COLORS["orange"]][:len(status_count)]
-        fig, ax = _mpl_pie()
-        wedges, texts, autotexts = ax.pie(
-            status_count["Count"], labels=status_count["Status"],
-            colors=status_colors, autopct="%1.0f%%",
-            pctdistance=0.75, startangle=90,
-            wedgeprops=dict(width=0.5, edgecolor="#1e2235")
-        )
-        for t in texts:
-            t.set_color("#e0e0e0")
-            t.set_fontsize(9)
-        for at in autotexts:
-            at.set_color("#0e1117")
-            at.set_fontweight("bold")
-            at.set_fontsize(9)
-        ax.set_title("# Campaigns by Status", color="#e0e0e0", fontsize=11)
-        plt.tight_layout()
-        st.pyplot(fig, use_container_width=True)
-        plt.close(fig)
+        status_colors = ["#00d4ff", "#ffd700", "#ff8c00"][:len(status_count)]
+        fig = go.Figure(go.Pie(
+            values=status_count["Count"],
+            labels=status_count["Status"],
+            hole=0.5,
+            marker=dict(colors=status_colors, line=dict(color="#1e2235", width=2)),
+            textfont=dict(color="#e0e0e0", size=10),
+        ))
+        fig.update_layout(**_ly_pie(title=dict(text="# Campaigns by Status", font=dict(color="#e0e0e0", size=12))))
+        st.plotly_chart(fig, use_container_width=True, key="t4_status_pie")
 
     with col2:
         status_spend = df_camp.groupby("Ad_Status")["Expense_VND"].sum().reset_index()
-        bar_colors_status = [COLORS["cyan"], COLORS["yellow"], COLORS["orange"]][:len(status_spend)]
-        fig, ax = _mpl(len(status_spend), min_h=2.5)
-        bars = ax.barh(status_spend["Ad_Status"], status_spend["Expense_VND"],
-                       color=bar_colors_status, height=0.5)
-        ax.set_xlabel("Total Spend (VNĐ)", color="#c0c8d8")
-        ax.set_title("Spend by Status (VNĐ)", color="#e0e0e0", fontsize=10)
-        mx_ss = status_spend["Expense_VND"].max() if status_spend["Expense_VND"].max() > 0 else 1
-        ax.set_xlim(right=mx_ss * 1.30)
-        for bar, val in zip(bars, status_spend["Expense_VND"]):
-            ax.text(bar.get_width() + mx_ss * 0.01,
-                    bar.get_y() + bar.get_height() / 2,
-                    fmt_vnd(val), va="center", ha="left",
-                    color="#e0e0e0", fontsize=8)
-        plt.tight_layout()
-        st.pyplot(fig, use_container_width=True)
-        plt.close(fig)
+        bar_colors_status = ["#00d4ff", "#ffd700", "#ff8c00"][:len(status_spend)]
+        fig = _hbar(
+            y=status_spend["Ad_Status"],
+            x=status_spend["Expense_VND"],
+            colors=bar_colors_status,
+            texts=[fmt_vnd(v) for v in status_spend["Expense_VND"]],
+            xaxis_title="Total Spend (VNĐ)",
+        )
+        fig.update_layout(title=dict(text="Spend by Status (VNĐ)", font=dict(color="#e0e0e0", size=12)))
+        st.plotly_chart(fig, use_container_width=True, key="t4_status_spend_bar")
 
     st.markdown("---")
 
@@ -862,9 +821,8 @@ with tab4:
 
     naming_df = df_camp[["Campaign", "Ad_Status"]].copy()
     naming_df["Naming Issues"] = naming_df["Campaign"].apply(check_naming)
-    st.dataframe(naming_df, hide_index=True)
+    st.markdown(styled_table(naming_df), unsafe_allow_html=True)
 
-    # Quick insight
     acos_high = df_camp[df_camp["ACOS"] > 30]
     st.markdown(f"""
     <div class="quick-insight">
@@ -885,7 +843,6 @@ with tab5:
     st.markdown("## 📌 Summary Insight — Shopee")
     st.caption("Phân tích tự động dựa trên data hiện có. Cập nhật mỗi lần load.")
 
-    # ─── Vấn đề đang tồn tại ───────────────────────────────
     st.markdown("## 🔴 Vấn đề đang tồn tại")
 
     issues = []
@@ -960,7 +917,6 @@ with tab5:
 
     st.markdown("---")
 
-    # ─── Data Quality Score ─────────────────────────────────
     st.markdown("## 📊 Data Quality Score — Kỳ này")
 
     checks = {
@@ -997,7 +953,6 @@ with tab5:
         col = col1 if i < half else col2
         col.markdown(f"{'✅' if passed else '❌'} {check_name}")
 
-    # Quick insight summary
     st.markdown(f"""
     <div class="quick-insight">
         <div class="quick-insight-title">⚡ QUICK INSIGHT</div>
@@ -1072,7 +1027,6 @@ with tab6:
 
     st.markdown("---")
 
-    # Checklist
     st.markdown("### 📋 Checklist Hành Động — Shopee Ads")
 
     st.markdown("#### Budget & Bidding")
