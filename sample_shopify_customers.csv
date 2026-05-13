@@ -1,0 +1,201 @@
+Order Name,Created at,Email,Customer Name,Province,District,Total,Financial Status,Is New Customer
+#SHF1001,2025-11-02 19:07:42,cust071@outlook.com,Bùi Lan,Bình Dương,Thuận An,4650276,paid,True
+#SHF1002,2025-11-02 13:30:40,cust099@yahoo.com,Trần Linh,Hà Nội,Hoàn Kiếm,2882357,paid,True
+#SHF1003,2025-11-04 13:27:06,cust007@yahoo.com,Nguyễn Thảo,TP.HCM,Quận 1,3987124,paid,True
+#SHF1004,2025-11-04 13:05:04,cust084@yahoo.com,Đinh Minh,Hà Nội,Long Biên,2745131,refunded,True
+#SHF1005,2025-11-05 18:24:37,cust020@outlook.com,Bùi Phúc,Hà Nội,Cầu Giấy,4746049,paid,True
+#SHF1006,2025-11-06 17:05:10,cust042@hotmail.com,Vũ Minh,TP.HCM,Quận 3,591865,paid,True
+#SHF1007,2025-11-07 20:51:08,cust097@hotmail.com,Hoàng Tuấn,Hà Nội,Long Biên,4544588,paid,True
+#SHF1008,2025-11-08 14:23:51,cust084@yahoo.com,Đinh Minh,Hà Nội,Long Biên,1572200,paid,False
+#SHF1009,2025-11-08 14:53:29,cust055@hotmail.com,Đinh Linh,TP.HCM,Gò Vấp,2620473,paid,True
+#SHF1010,2025-11-09 18:47:46,cust028@hotmail.com,Bùi Minh,TP.HCM,Quận 3,3000856,paid,True
+#SHF1011,2025-11-09 19:06:05,cust009@outlook.com,Vũ Thảo,Cần Thơ,Ninh Kiều,3406158,paid,True
+#SHF1012,2025-11-10 12:34:17,cust079@yahoo.com,Đinh Trang,TP.HCM,Quận 3,4568472,paid,True
+#SHF1013,2025-11-12 20:21:37,cust054@gmail.com,Hoàng Minh,Hà Nội,Cầu Giấy,1722869,paid,True
+#SHF1014,2025-11-13 12:18:36,cust104@outlook.com,Đỗ Lan,Hà Nội,Tây Hồ,2783869,paid,True
+#SHF1015,2025-11-13 19:56:42,cust058@outlook.com,Nguyễn Tuấn,TP.HCM,Quận 1,3625354,paid,True
+#SHF1016,2025-11-15 17:34:56,cust115@yahoo.com,Lê Long,Bình Dương,Thuận An,4582494,paid,True
+#SHF1017,2025-11-15 20:34:34,cust118@hotmail.com,Lê Thảo,TP.HCM,Bình Thạnh,1929551,paid,True
+#SHF1018,2025-11-15 07:28:34,cust009@outlook.com,Vũ Thảo,Cần Thơ,Ninh Kiều,2781020,paid,False
+#SHF1019,2025-11-17 14:43:25,cust041@gmail.com,Nguyễn Mai,Đà Nẵng,Hải Châu,3256944,paid,True
+#SHF1020,2025-11-18 12:31:49,cust005@hotmail.com,Phạm Hương,Hà Nội,Đống Đa,2787623,refunded,True
+#SHF1021,2025-11-18 12:28:18,cust024@gmail.com,Ngô Mai,TP.HCM,Thủ Đức,1414032,paid,True
+#SHF1022,2025-11-19 16:39:46,cust043@outlook.com,Phạm Lan,Hà Nội,Cầu Giấy,4482588,paid,True
+#SHF1023,2025-11-21 15:40:28,cust002@gmail.com,Nguyễn Long,TP.HCM,Quận 3,2067438,paid,True
+#SHF1024,2025-11-21 09:18:35,cust075@hotmail.com,Phạm Minh,Cần Thơ,Ninh Kiều,1417559,paid,True
+#SHF1025,2025-11-22 17:10:21,cust059@hotmail.com,Hồ Tuấn,Đà Nẵng,Hải Châu,1135605,paid,True
+#SHF1026,2025-11-23 13:20:24,cust095@hotmail.com,Hoàng Anh,Khánh Hòa,Nha Trang,1315131,paid,True
+#SHF1027,2025-11-23 20:48:30,cust039@outlook.com,Phạm Thảo,Tiền Giang,Mỹ Tho,567661,partially_refunded,True
+#SHF1028,2025-11-23 08:15:58,cust043@outlook.com,Phạm Lan,Hà Nội,Cầu Giấy,2578007,paid,False
+#SHF1029,2025-11-24 11:32:23,cust007@yahoo.com,Nguyễn Thảo,TP.HCM,Quận 1,1807506,refunded,False
+#SHF1030,2025-11-27 13:02:45,cust116@outlook.com,Vũ Phúc,TP.HCM,Thủ Đức,2471206,paid,True
+#SHF1031,2025-11-27 14:30:57,cust060@yahoo.com,Vũ Phúc,Long An,Tân An,3401614,refunded,True
+#SHF1032,2025-11-27 14:08:48,cust018@outlook.com,Lê Bình,Long An,Đức Hoà,3466422,paid,True
+#SHF1033,2025-11-28 15:46:56,cust060@yahoo.com,Vũ Phúc,Long An,Tân An,4208654,paid,False
+#SHF1034,2025-11-30 23:35:59,cust122@hotmail.com,Trần Thảo,Hà Nội,Hoàn Kiếm,618033,paid,True
+#SHF1035,2025-11-30 03:40:19,cust022@gmail.com,Lê Bình,Hà Nội,Cầu Giấy,1130265,paid,True
+#SHF1036,2025-12-01 23:12:35,cust112@yahoo.com,Bùi Lan,Bình Dương,Thủ Dầu Một,3210309,paid,True
+#SHF1037,2025-12-03 13:16:03,cust013@outlook.com,Hoàng Tuấn,Hà Nội,Hoàn Kiếm,3418258,paid,True
+#SHF1038,2025-12-04 16:48:26,cust106@gmail.com,Trần Long,Hà Nội,Hoàn Kiếm,1715502,paid,True
+#SHF1039,2025-12-05 18:24:24,cust110@hotmail.com,Nguyễn Trang,Tiền Giang,Mỹ Tho,1921796,paid,True
+#SHF1040,2025-12-05 22:22:59,cust038@hotmail.com,Phạm Minh,Bình Dương,Thủ Dầu Một,3262779,paid,True
+#SHF1041,2025-12-06 02:04:05,cust060@yahoo.com,Vũ Phúc,Long An,Tân An,2819049,partially_refunded,False
+#SHF1042,2025-12-06 10:21:27,cust104@outlook.com,Đỗ Lan,Hà Nội,Tây Hồ,4220464,partially_refunded,False
+#SHF1043,2025-12-06 10:27:06,cust045@yahoo.com,Hoàng Anh,Cần Thơ,Bình Thuỷ,2692614,partially_refunded,True
+#SHF1044,2025-12-08 20:44:20,cust112@yahoo.com,Bùi Lan,Bình Dương,Thủ Dầu Một,1270173,paid,False
+#SHF1045,2025-12-08 14:12:40,cust093@gmail.com,Nguyễn Thảo,TP.HCM,Thủ Đức,3169355,paid,True
+#SHF1046,2025-12-08 12:36:16,cust014@outlook.com,Đỗ Linh,Long An,Tân An,3912504,partially_refunded,True
+#SHF1047,2025-12-11 09:42:09,cust109@outlook.com,Nguyễn Anh,TP.HCM,Bình Thạnh,967010,paid,True
+#SHF1048,2025-12-13 14:18:46,cust003@outlook.com,Đinh Anh,Hà Nội,Long Biên,2155016,partially_refunded,True
+#SHF1049,2025-12-14 16:51:12,cust016@outlook.com,Ngô Long,Bình Dương,Thuận An,2197900,partially_refunded,True
+#SHF1050,2025-12-14 12:07:14,cust068@gmail.com,Vũ Trang,Khánh Hòa,Nha Trang,4721038,refunded,True
+#SHF1051,2025-12-14 13:37:19,cust106@gmail.com,Trần Long,Hà Nội,Hoàn Kiếm,1423875,paid,False
+#SHF1052,2025-12-16 23:48:06,cust067@outlook.com,Ngô Anh,Khánh Hòa,Cam Ranh,2623221,paid,True
+#SHF1053,2025-12-16 18:20:56,cust086@hotmail.com,Đỗ Bình,Hà Nội,Long Biên,4380993,refunded,True
+#SHF1054,2025-12-16 12:23:43,cust101@hotmail.com,Ngô Trang,Hà Nội,Hoàn Kiếm,3068103,paid,True
+#SHF1055,2025-12-16 12:54:19,cust027@gmail.com,Đặng Hà,Hà Nội,Đống Đa,581264,paid,True
+#SHF1056,2025-12-18 20:18:47,cust034@yahoo.com,Vũ Trang,Đồng Nai,Long Thành,523275,paid,True
+#SHF1057,2025-12-18 12:47:47,cust070@gmail.com,Trần Anh,Cần Thơ,Bình Thuỷ,3193714,partially_refunded,True
+#SHF1058,2025-12-20 12:21:49,cust032@hotmail.com,Nguyễn Hương,Đồng Nai,Long Thành,2960072,paid,True
+#SHF1059,2025-12-20 19:38:02,cust060@yahoo.com,Vũ Phúc,Long An,Tân An,1072735,paid,False
+#SHF1060,2025-12-22 12:41:14,cust077@hotmail.com,Nguyễn Tuấn,TP.HCM,Tân Phú,2500609,paid,True
+#SHF1061,2025-12-23 16:24:38,cust014@outlook.com,Đỗ Linh,Long An,Tân An,1412826,paid,False
+#SHF1062,2025-12-24 16:47:51,cust068@gmail.com,Vũ Trang,Khánh Hòa,Nha Trang,3197143,partially_refunded,False
+#SHF1063,2025-12-25 09:56:15,cust073@yahoo.com,Hoàng Minh,TP.HCM,Bình Thạnh,1362522,paid,True
+#SHF1064,2025-12-26 18:34:51,cust109@outlook.com,Nguyễn Anh,TP.HCM,Bình Thạnh,1303692,paid,False
+#SHF1065,2025-12-26 23:29:32,cust106@gmail.com,Trần Long,Hà Nội,Hoàn Kiếm,1661157,refunded,False
+#SHF1066,2025-12-26 20:48:07,cust068@gmail.com,Vũ Trang,Khánh Hòa,Nha Trang,1814532,paid,False
+#SHF1067,2025-12-28 13:53:50,cust083@outlook.com,Hồ Linh,Hà Nội,Đống Đa,921240,paid,True
+#SHF1068,2025-12-28 08:49:09,cust109@outlook.com,Nguyễn Anh,TP.HCM,Bình Thạnh,4359744,paid,False
+#SHF1069,2025-12-28 21:05:33,cust117@hotmail.com,Vũ Bình,TP.HCM,Thủ Đức,1444789,paid,True
+#SHF1070,2025-12-30 12:51:15,cust008@outlook.com,Đỗ Tuấn,Hà Nội,Cầu Giấy,3607092,paid,True
+#SHF1071,2025-12-30 13:01:15,cust038@hotmail.com,Phạm Minh,Bình Dương,Thủ Dầu Một,2713573,refunded,False
+#SHF1072,2025-12-30 06:28:13,cust108@outlook.com,Ngô Minh,TP.HCM,Quận 3,1025893,refunded,True
+#SHF1073,2025-12-31 19:08:02,cust007@yahoo.com,Nguyễn Thảo,TP.HCM,Quận 1,2755363,refunded,False
+#SHF1074,2025-12-31 17:07:13,cust048@hotmail.com,Lê Tuấn,TP.HCM,Gò Vấp,4881514,partially_refunded,True
+#SHF1075,2026-01-01 15:16:08,cust123@outlook.com,Ngô Tuấn,TP.HCM,Tân Phú,4648887,paid,True
+#SHF1076,2026-01-01 14:53:46,cust025@gmail.com,Vũ Linh,Cần Thơ,Ninh Kiều,1707094,paid,True
+#SHF1077,2026-01-01 19:02:50,cust010@outlook.com,Đỗ Trang,Cần Thơ,Ninh Kiều,2721192,refunded,True
+#SHF1078,2026-01-02 09:27:08,cust085@gmail.com,Ngô Long,Hà Nội,Long Biên,1168406,paid,True
+#SHF1079,2026-01-04 08:02:31,cust072@yahoo.com,Phạm Bình,Cần Thơ,Ninh Kiều,4168866,paid,True
+#SHF1080,2026-01-04 09:13:30,cust031@hotmail.com,Phạm Trang,TP.HCM,Thủ Đức,3353406,refunded,True
+#SHF1081,2026-01-04 19:02:02,cust016@outlook.com,Ngô Long,Bình Dương,Thuận An,1533255,refunded,False
+#SHF1082,2026-01-06 05:27:17,cust111@yahoo.com,Hoàng Tuấn,TP.HCM,Thủ Đức,3552766,paid,True
+#SHF1083,2026-01-07 20:23:22,cust001@outlook.com,Hồ Hà,Hà Nội,Đống Đa,1040677,paid,True
+#SHF1084,2026-01-08 19:44:26,cust099@yahoo.com,Trần Linh,Hà Nội,Hoàn Kiếm,3594235,paid,False
+#SHF1085,2026-01-09 11:43:11,cust023@hotmail.com,Đặng Mai,TP.HCM,Gò Vấp,1671459,paid,True
+#SHF1086,2026-01-09 15:39:40,cust018@outlook.com,Lê Bình,Long An,Đức Hoà,3359653,paid,False
+#SHF1087,2026-01-09 19:51:49,cust064@outlook.com,Hoàng Phúc,TP.HCM,Quận 1,2466197,paid,True
+#SHF1088,2026-01-11 16:22:06,cust004@hotmail.com,Lê Linh,TP.HCM,Thủ Đức,887952,paid,True
+#SHF1089,2026-01-13 10:19:52,cust098@gmail.com,Đinh Lan,TP.HCM,Tân Phú,2709373,paid,True
+#SHF1090,2026-01-13 13:25:09,cust127@hotmail.com,Nguyễn Phúc,Cần Thơ,Bình Thuỷ,4647703,paid,True
+#SHF1091,2026-01-17 20:17:25,cust037@outlook.com,Hoàng Long,Hà Nội,Cầu Giấy,1530117,paid,True
+#SHF1092,2026-01-19 14:08:42,cust097@hotmail.com,Hoàng Tuấn,Hà Nội,Long Biên,3396818,paid,False
+#SHF1093,2026-01-21 20:54:36,cust064@outlook.com,Hoàng Phúc,TP.HCM,Quận 1,2857821,refunded,False
+#SHF1094,2026-01-21 14:32:00,cust074@yahoo.com,Bùi Long,Khánh Hòa,Cam Ranh,1025134,paid,True
+#SHF1095,2026-01-22 13:26:35,cust014@outlook.com,Đỗ Linh,Long An,Tân An,744761,paid,False
+#SHF1096,2026-01-23 18:08:09,cust064@outlook.com,Hoàng Phúc,TP.HCM,Quận 1,3430098,paid,False
+#SHF1097,2026-01-26 14:46:24,cust028@hotmail.com,Bùi Minh,TP.HCM,Quận 3,3471820,paid,False
+#SHF1098,2026-01-29 21:12:34,cust097@hotmail.com,Hoàng Tuấn,Hà Nội,Long Biên,564323,paid,False
+#SHF1099,2026-02-01 05:43:04,cust117@hotmail.com,Vũ Bình,TP.HCM,Thủ Đức,1737715,paid,False
+#SHF1100,2026-02-02 22:56:31,cust040@gmail.com,Lê Long,TP.HCM,Quận 1,1454480,paid,True
+#SHF1101,2026-02-03 09:57:05,cust066@hotmail.com,Lê Minh,Hà Nội,Đống Đa,2832811,paid,True
+#SHF1102,2026-02-03 22:39:20,cust109@outlook.com,Nguyễn Anh,TP.HCM,Bình Thạnh,1354016,paid,False
+#SHF1103,2026-02-04 13:34:58,cust125@outlook.com,Ngô Bình,Bình Dương,Thuận An,1364909,paid,True
+#SHF1104,2026-02-05 13:24:34,cust072@yahoo.com,Phạm Bình,Cần Thơ,Ninh Kiều,1550493,paid,False
+#SHF1105,2026-02-06 11:50:13,cust124@hotmail.com,Đinh Bình,Khánh Hòa,Cam Ranh,782762,paid,True
+#SHF1106,2026-02-06 20:48:33,cust077@hotmail.com,Nguyễn Tuấn,TP.HCM,Tân Phú,2105118,partially_refunded,False
+#SHF1107,2026-02-06 20:16:55,cust020@outlook.com,Bùi Phúc,Hà Nội,Cầu Giấy,3383427,paid,False
+#SHF1108,2026-02-07 16:15:26,cust086@hotmail.com,Đỗ Bình,Hà Nội,Long Biên,1916012,paid,False
+#SHF1109,2026-02-07 18:57:05,cust060@yahoo.com,Vũ Phúc,Long An,Tân An,1071650,refunded,False
+#SHF1110,2026-02-08 07:03:23,cust025@gmail.com,Vũ Linh,Cần Thơ,Ninh Kiều,4976576,paid,False
+#SHF1111,2026-02-08 18:46:35,cust017@outlook.com,Hoàng Hương,TP.HCM,Quận 1,885925,paid,True
+#SHF1112,2026-02-09 20:30:25,cust073@yahoo.com,Hoàng Minh,TP.HCM,Bình Thạnh,3363793,paid,False
+#SHF1113,2026-02-10 23:49:54,cust019@hotmail.com,Bùi Anh,TP.HCM,Quận 1,4257974,paid,True
+#SHF1114,2026-02-11 17:56:24,cust013@outlook.com,Hoàng Tuấn,Hà Nội,Hoàn Kiếm,903081,partially_refunded,False
+#SHF1115,2026-02-12 21:06:58,cust060@yahoo.com,Vũ Phúc,Long An,Tân An,2899105,refunded,False
+#SHF1116,2026-02-12 13:16:50,cust064@outlook.com,Hoàng Phúc,TP.HCM,Quận 1,878892,paid,False
+#SHF1117,2026-02-14 01:55:38,cust041@gmail.com,Nguyễn Mai,Đà Nẵng,Hải Châu,4699591,paid,False
+#SHF1118,2026-02-15 14:02:57,cust110@hotmail.com,Nguyễn Trang,Tiền Giang,Mỹ Tho,3654240,paid,False
+#SHF1119,2026-02-21 19:58:25,cust077@hotmail.com,Nguyễn Tuấn,TP.HCM,Tân Phú,1156702,paid,False
+#SHF1120,2026-02-21 16:57:04,cust043@outlook.com,Phạm Lan,Hà Nội,Cầu Giấy,3754600,paid,False
+#SHF1121,2026-02-22 16:51:59,cust032@hotmail.com,Nguyễn Hương,Đồng Nai,Long Thành,2485296,paid,False
+#SHF1122,2026-02-22 08:49:32,cust053@hotmail.com,Đinh Long,Hải Phòng,Lê Chân,2690222,paid,True
+#SHF1123,2026-02-23 09:20:40,cust116@outlook.com,Vũ Phúc,TP.HCM,Thủ Đức,4249783,paid,False
+#SHF1124,2026-02-24 18:43:54,cust097@hotmail.com,Hoàng Tuấn,Hà Nội,Long Biên,3219269,paid,False
+#SHF1125,2026-02-24 18:47:25,cust106@gmail.com,Trần Long,Hà Nội,Hoàn Kiếm,2824797,partially_refunded,False
+#SHF1126,2026-02-25 22:20:34,cust009@outlook.com,Vũ Thảo,Cần Thơ,Ninh Kiều,1286667,paid,False
+#SHF1127,2026-02-27 23:08:12,cust015@yahoo.com,Lê Lan,Tiền Giang,Cai Lậy,1853649,paid,True
+#SHF1128,2026-03-01 17:59:27,cust109@outlook.com,Nguyễn Anh,TP.HCM,Bình Thạnh,2212503,paid,False
+#SHF1129,2026-03-01 15:41:54,cust088@yahoo.com,Phạm Linh,Đồng Nai,Long Thành,3485418,paid,True
+#SHF1130,2026-03-01 20:10:54,cust016@outlook.com,Ngô Long,Bình Dương,Thuận An,4109736,paid,False
+#SHF1131,2026-03-01 21:31:51,cust083@outlook.com,Hồ Linh,Hà Nội,Đống Đa,1884418,paid,False
+#SHF1132,2026-03-01 08:08:14,cust016@outlook.com,Ngô Long,Bình Dương,Thuận An,886594,paid,False
+#SHF1133,2026-03-02 00:14:49,cust039@outlook.com,Phạm Thảo,Tiền Giang,Mỹ Tho,3369760,paid,False
+#SHF1134,2026-03-03 15:25:18,cust104@outlook.com,Đỗ Lan,Hà Nội,Tây Hồ,4306503,paid,False
+#SHF1135,2026-03-06 12:54:50,cust021@hotmail.com,Đặng Phúc,Hà Nội,Đống Đa,4337247,paid,True
+#SHF1136,2026-03-06 12:51:37,cust108@outlook.com,Ngô Minh,TP.HCM,Quận 3,1592501,paid,False
+#SHF1137,2026-03-08 11:13:12,cust097@hotmail.com,Hoàng Tuấn,Hà Nội,Long Biên,637023,refunded,False
+#SHF1138,2026-03-09 19:54:08,cust050@yahoo.com,Bùi Anh,Long An,Đức Hoà,1635964,paid,True
+#SHF1139,2026-03-11 15:04:26,cust117@hotmail.com,Vũ Bình,TP.HCM,Thủ Đức,1983624,paid,False
+#SHF1140,2026-03-12 12:46:43,cust078@gmail.com,Hồ Hà,TP.HCM,Bình Thạnh,2655748,paid,True
+#SHF1141,2026-03-14 19:26:10,cust038@hotmail.com,Phạm Minh,Bình Dương,Thủ Dầu Một,2456109,paid,False
+#SHF1142,2026-03-15 19:10:41,cust099@yahoo.com,Trần Linh,Hà Nội,Hoàn Kiếm,3545179,paid,False
+#SHF1143,2026-03-15 07:49:48,cust021@hotmail.com,Đặng Phúc,Hà Nội,Đống Đa,4425282,paid,False
+#SHF1144,2026-03-16 20:30:45,cust038@hotmail.com,Phạm Minh,Bình Dương,Thủ Dầu Một,1373172,paid,False
+#SHF1145,2026-03-18 20:03:14,cust127@hotmail.com,Nguyễn Phúc,Cần Thơ,Bình Thuỷ,4185540,paid,False
+#SHF1146,2026-03-19 14:29:42,cust122@hotmail.com,Trần Thảo,Hà Nội,Hoàn Kiếm,1022244,paid,False
+#SHF1147,2026-03-19 12:13:42,cust047@outlook.com,Lê Lan,Hà Nội,Hoàn Kiếm,4563309,paid,True
+#SHF1148,2026-03-19 20:44:35,cust038@hotmail.com,Phạm Minh,Bình Dương,Thủ Dầu Một,1562636,paid,False
+#SHF1149,2026-03-20 18:53:56,cust073@yahoo.com,Hoàng Minh,TP.HCM,Bình Thạnh,2286921,paid,False
+#SHF1150,2026-03-24 07:36:35,cust043@outlook.com,Phạm Lan,Hà Nội,Cầu Giấy,1329735,paid,False
+#SHF1151,2026-03-25 12:49:28,cust022@gmail.com,Lê Bình,Hà Nội,Cầu Giấy,3836007,paid,False
+#SHF1152,2026-03-25 21:58:13,cust127@hotmail.com,Nguyễn Phúc,Cần Thơ,Bình Thuỷ,4330375,refunded,False
+#SHF1153,2026-03-27 15:21:07,cust032@hotmail.com,Nguyễn Hương,Đồng Nai,Long Thành,3062469,paid,False
+#SHF1154,2026-03-27 17:22:27,cust102@outlook.com,Hồ Tuấn,Hà Nội,Long Biên,3586176,paid,True
+#SHF1155,2026-03-27 20:17:16,cust038@hotmail.com,Phạm Minh,Bình Dương,Thủ Dầu Một,3795374,paid,False
+#SHF1156,2026-03-28 19:57:11,cust117@hotmail.com,Vũ Bình,TP.HCM,Thủ Đức,4181262,paid,False
+#SHF1157,2026-03-29 15:26:49,cust079@yahoo.com,Đinh Trang,TP.HCM,Quận 3,3109089,paid,False
+#SHF1158,2026-03-30 22:26:30,cust011@gmail.com,Nguyễn Linh,Đà Nẵng,Ngũ Hành Sơn,3008749,paid,True
+#SHF1159,2026-04-02 12:04:18,cust072@yahoo.com,Phạm Bình,Cần Thơ,Ninh Kiều,1414228,partially_refunded,False
+#SHF1160,2026-04-02 08:18:22,cust017@outlook.com,Hoàng Hương,TP.HCM,Quận 1,1453959,paid,False
+#SHF1161,2026-04-03 09:14:21,cust054@gmail.com,Hoàng Minh,Hà Nội,Cầu Giấy,2689415,paid,False
+#SHF1162,2026-04-03 11:05:25,cust037@outlook.com,Hoàng Long,Hà Nội,Cầu Giấy,2127781,paid,False
+#SHF1163,2026-04-03 07:36:03,cust102@outlook.com,Hồ Tuấn,Hà Nội,Long Biên,3869538,paid,False
+#SHF1164,2026-04-04 19:14:43,cust068@gmail.com,Vũ Trang,Khánh Hòa,Nha Trang,3742374,paid,False
+#SHF1165,2026-04-05 17:55:45,cust064@outlook.com,Hoàng Phúc,TP.HCM,Quận 1,845266,partially_refunded,False
+#SHF1166,2026-04-05 11:48:20,cust054@gmail.com,Hoàng Minh,Hà Nội,Cầu Giấy,4456679,paid,False
+#SHF1167,2026-04-07 22:25:31,cust052@outlook.com,Nguyễn Long,Hà Nội,Hoàn Kiếm,2038601,partially_refunded,True
+#SHF1168,2026-04-08 19:03:45,cust091@yahoo.com,Bùi Trang,TP.HCM,Quận 3,3077855,partially_refunded,True
+#SHF1169,2026-04-08 06:28:41,cust051@hotmail.com,Lê Nam,Cần Thơ,Bình Thuỷ,3571475,paid,True
+#SHF1170,2026-04-13 12:30:28,cust109@outlook.com,Nguyễn Anh,TP.HCM,Bình Thạnh,4503484,paid,False
+#SHF1171,2026-04-13 11:20:37,cust127@hotmail.com,Nguyễn Phúc,Cần Thơ,Bình Thuỷ,1607955,paid,False
+#SHF1172,2026-04-14 13:35:27,cust073@yahoo.com,Hoàng Minh,TP.HCM,Bình Thạnh,4302010,paid,False
+#SHF1173,2026-04-15 19:05:55,cust081@gmail.com,Hồ Tuấn,Hà Nội,Long Biên,2432728,paid,True
+#SHF1174,2026-04-16 12:51:09,cust054@gmail.com,Hoàng Minh,Hà Nội,Cầu Giấy,2399492,paid,False
+#SHF1175,2026-04-18 21:58:38,cust073@yahoo.com,Hoàng Minh,TP.HCM,Bình Thạnh,2861632,paid,False
+#SHF1176,2026-04-18 02:34:52,cust091@yahoo.com,Bùi Trang,TP.HCM,Quận 3,1914397,paid,False
+#SHF1177,2026-04-19 21:45:38,cust106@gmail.com,Trần Long,Hà Nội,Hoàn Kiếm,3677993,refunded,False
+#SHF1178,2026-04-20 19:02:49,cust003@outlook.com,Đinh Anh,Hà Nội,Long Biên,3631209,paid,False
+#SHF1179,2026-04-20 21:42:46,cust091@yahoo.com,Bùi Trang,TP.HCM,Quận 3,1723520,refunded,False
+#SHF1180,2026-04-20 20:14:49,cust020@outlook.com,Bùi Phúc,Hà Nội,Cầu Giấy,4557893,paid,False
+#SHF1181,2026-04-20 23:06:29,cust044@hotmail.com,Lê Thảo,TP.HCM,Gò Vấp,3717635,paid,True
+#SHF1182,2026-04-21 12:36:50,cust063@gmail.com,Phạm Nam,TP.HCM,Quận 1,2800119,paid,True
+#SHF1183,2026-04-22 12:46:24,cust027@gmail.com,Đặng Hà,Hà Nội,Đống Đa,2399443,paid,False
+#SHF1184,2026-04-22 21:57:25,cust069@hotmail.com,Ngô Hương,Cần Thơ,Ninh Kiều,3948503,refunded,True
+#SHF1185,2026-04-22 13:13:26,cust113@outlook.com,Hoàng Hương,Hà Nội,Đống Đa,1939758,paid,True
+#SHF1186,2026-04-25 06:08:19,cust119@yahoo.com,Ngô Thảo,Bình Dương,Dĩ An,2305468,refunded,True
+#SHF1187,2026-04-25 20:27:17,cust048@hotmail.com,Lê Tuấn,TP.HCM,Gò Vấp,3927975,paid,False
+#SHF1188,2026-04-26 19:30:51,cust097@hotmail.com,Hoàng Tuấn,Hà Nội,Long Biên,626108,paid,False
+#SHF1189,2026-04-27 11:57:19,cust112@yahoo.com,Bùi Lan,Bình Dương,Thủ Dầu Một,3660110,paid,False
+#SHF1190,2026-04-28 22:53:18,cust122@hotmail.com,Trần Thảo,Hà Nội,Hoàn Kiếm,3730019,refunded,False
+#SHF1191,2026-04-29 11:26:54,cust020@outlook.com,Bùi Phúc,Hà Nội,Cầu Giấy,2207692,partially_refunded,False
+#SHF1192,2026-04-30 10:46:03,cust115@yahoo.com,Lê Long,Bình Dương,Thuận An,2580154,paid,False
+#SHF1193,2026-04-30 14:27:38,cust017@outlook.com,Hoàng Hương,TP.HCM,Quận 1,2744702,paid,False
+#SHF1194,2026-05-02 21:46:59,cust063@gmail.com,Phạm Nam,TP.HCM,Quận 1,3877778,paid,False
+#SHF1195,2026-05-03 17:25:55,cust066@hotmail.com,Lê Minh,Hà Nội,Đống Đa,3030034,paid,False
+#SHF1196,2026-05-04 17:44:17,cust009@outlook.com,Vũ Thảo,Cần Thơ,Ninh Kiều,3192755,partially_refunded,False
+#SHF1197,2026-05-04 14:54:14,cust031@hotmail.com,Phạm Trang,TP.HCM,Thủ Đức,888349,refunded,False
+#SHF1198,2026-05-04 15:27:39,cust049@outlook.com,Bùi Thảo,Hà Nội,Tây Hồ,1562729,paid,True
+#SHF1199,2026-05-07 14:59:56,cust027@gmail.com,Đặng Hà,Hà Nội,Đống Đa,3624071,paid,False
+#SHF1200,2026-05-07 21:24:47,cust000@gmail.com,Lê Nam,Cần Thơ,Ninh Kiều,3886501,paid,True
