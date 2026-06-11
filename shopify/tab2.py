@@ -110,7 +110,7 @@ def render(uploaded_file=None):
     fig = go.Figure()
     for brand in brands:
         sub = monthly_brand[monthly_brand["Brand"] == brand]
-        sub = sub.set_index("month_label").reindex(months_ordered, fill_value=0).reset_index()
+        sub = sub[["month_label", "Line Total"]].set_index("month_label").reindex(months_ordered, fill_value=0).reset_index()
         fig.add_trace(go.Bar(
             name=brand,
             x=sub["month_label"],
