@@ -1,6 +1,8 @@
 import streamlit as st
 from utils import THB_TO_VND
 
+# VERSION: 2024-06-14-v2
+
 st.set_page_config(
     page_title="VSTu Analytics Dashboard",
     page_icon="🛍️",
