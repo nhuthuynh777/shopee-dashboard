@@ -88,10 +88,10 @@ with st.sidebar:
         st.markdown(f"**💱 Tỷ giá:** 1 THB = {THB_TO_VND:,} VNĐ")
         st.caption("Nguồn: Google")
     elif "TikTok" in platform:
-        st.markdown("### 📂 TikTok Ads Performance")
+        st.markdown("### 📊 Branding — TikTok Ads")
         tiktok_perf_files = st.file_uploader(
-            "Performance Report (.xlsx)", type=["xlsx"], accept_multiple_files=True,
-            help="Export từ TikTok Ads Manager → Report → By Campaign/Adgroup/Day. Cần cột: Campaign name, Cost, Impressions, Video views, Purchases (Shop), Gross revenue (Shop).",
+            "Raw TikTok Performance (.xlsx)", type=["xlsx"], accept_multiple_files=True,
+            help="Export từ TikTok Ads Manager → Report. Cần: Campaign name, Cost, Impressions, Video views, Purchases (Shop), Gross revenue (Shop). Đơn vị THB — tự động × 830.",
             key="tt_perf",
         )
         if tiktok_perf_files:
@@ -100,10 +100,10 @@ with st.sidebar:
                 st.markdown(f"• {f.name}")
 
         st.markdown("---")
-        st.markdown("### 📦 GMV Max / Shop Sales")
+        st.markdown("### 📦 GMV Max")
         tiktok_gmvmax_files = st.file_uploader(
-            "TikTok Shop Sales (.xlsx)", type=["xlsx"], accept_multiple_files=True,
-            help="Export từ TikTok Ads → TikTok Shop sales report (SPU level). Cần cột: SPU name, Campaign name, Purchases (Shop), Gross revenue (Shop).",
+            "Raw Data GMV Max (.xlsx)", type=["xlsx"], accept_multiple_files=True,
+            help="Export TikTok Shop Sales (SPU level). Cần: SPU name, Campaign name, Purchases (Shop), Gross revenue (Shop). Đơn vị THB — tự động × 830.",
             key="tt_gmvmax",
         )
         if tiktok_gmvmax_files:
@@ -113,7 +113,7 @@ with st.sidebar:
 
         st.markdown("---")
         st.markdown(f"**💱 Tỷ giá:** 1 THB = {THB_TO_VND:,} VNĐ")
-        st.caption("Auto-detect: THB → VNĐ quy đổi tự động")
+        st.caption("Tất cả giá trị TikTok đều THB → tự động quy đổi VNĐ")
     else:
         st.markdown("### 📂 Shopify Data")
 
@@ -219,7 +219,7 @@ if "TikTok" in platform:
         <div style='background:#1e2235;border:1px solid #2d3149;border-radius:12px;padding:48px;text-align:center;margin-top:32px;'>
             <div style='font-size:48px;margin-bottom:16px;'>📱</div>
             <div style='font-size:20px;color:#e0e0e0;margin-bottom:8px;'>Chưa có data</div>
-            <div style='color:#8b9bb4;font-size:14px;'>Upload file TikTok Ads Performance hoặc GMV Max ở sidebar bên trái</div>
+            <div style='color:#8b9bb4;font-size:14px;'>Upload file TikTok Ads Performance (Branding) hoặc GMV Max ở sidebar bên trái</div>
         </div>""", unsafe_allow_html=True)
         st.stop()
 
@@ -228,25 +228,39 @@ if "TikTok" in platform:
         df_tt_camp = get_camp_summary(df_tt)
         df_gmvmax  = load_gmvmax_files(tiktok_gmvmax_files) if tiktok_gmvmax_files else pd.DataFrame()
 
-    if not df_tt.empty:
-        currency_info = df_tt['Currency_raw'].iloc[0]
-        is_thb = 'THB' in str(currency_info).upper()
-        st.markdown(
-            f'<div class="info-banner">💱 Tỷ giá: 1 THB = {THB_TO_VND:,} VNĐ &nbsp;|&nbsp; '
-            f'Currency: {"THB → VNĐ (auto-convert)" if is_thb else "VNĐ"} &nbsp;|&nbsp; '
-            f'{len(tiktok_perf_files)} file performance đã tải'
-            f'{f" | {len(tiktok_gmvmax_files)} file GMV Max" if tiktok_gmvmax_files else ""}</div>',
-            unsafe_allow_html=True,
-        )
+    file_info = []
+    if tiktok_perf_files:
+        file_info.append(f"{len(tiktok_perf_files)} file Branding")
+    if tiktok_gmvmax_files:
+        file_info.append(f"{len(tiktok_gmvmax_files)} file GMV Max")
+    st.markdown(
+        f'<div class="info-banner">💱 1 THB = {THB_TO_VND:,} VNĐ &nbsp;|&nbsp; '
+        f'Tất cả giá trị TikTok đã quy đổi THB → VNĐ &nbsp;|&nbsp; '
+        f'{" | ".join(file_info)}</div>',
+        unsafe_allow_html=True,
+    )
 
-    tt1, tt2, tt3, tt4 = st.tabs([
-        "📊 Business Health", "🎬 Video Performance",
-        "🛒 Shop Performance", "📦 GMV Max",
-    ])
-    with tt1: tt_tab1.render(df_tt, df_tt_camp)
-    with tt2: tt_tab2.render(df_tt, df_tt_camp)
-    with tt3: tt_tab3.render(df_tt, df_tt_camp)
-    with tt4: tt_tab4.render(df_gmvmax)
+    # 2 subtab chính: Branding và GMV Max
+    tt_branding, tt_gmvmax = st.tabs(["📊 Branding", "📦 GMV Max"])
+
+    with tt_branding:
+        if df_tt.empty:
+            st.markdown("""
+            <div style='background:#1e2235;border:1px solid #2d3149;border-radius:12px;
+            padding:40px;text-align:center;margin-top:16px;'>
+                <div style='font-size:36px;margin-bottom:10px;'>📊</div>
+                <div style='font-size:16px;color:#e0e0e0;'>Upload file TikTok Ads Performance ở sidebar để xem Branding report</div>
+            </div>""", unsafe_allow_html=True)
+        else:
+            b1, b2, b3 = st.tabs([
+                "🏥 Business Health", "🎬 Video Performance", "🛒 Shop Performance"
+            ])
+            with b1: tt_tab1.render(df_tt, df_tt_camp)
+            with b2: tt_tab2.render(df_tt, df_tt_camp)
+            with b3: tt_tab3.render(df_tt, df_tt_camp)
+
+    with tt_gmvmax:
+        tt_tab4.render(df_gmvmax)
 
     st.stop()
 

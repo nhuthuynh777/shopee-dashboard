@@ -15,12 +15,10 @@ def render(df_gmvmax):
         </div>""", unsafe_allow_html=True)
         return
 
-    currency_raw = df_gmvmax['Currency_raw'].iloc[0] if len(df_gmvmax) > 0 else 'VND'
-    if 'THB' in str(currency_raw).upper():
-        st.markdown(
-            f'<div class="info-banner">💱 Đã quy đổi THB → VNĐ: 1 THB = {THB_TO_VND:,} VNĐ</div>',
-            unsafe_allow_html=True,
-        )
+    st.markdown(
+        f'<div class="info-banner">💱 GMV & AOV đã quy đổi: 1 THB = {THB_TO_VND:,} VNĐ</div>',
+        unsafe_allow_html=True,
+    )
 
     total_gmv      = df_gmvmax['GMV_VND'].sum()
     total_purchases= df_gmvmax['Purchases'].sum()

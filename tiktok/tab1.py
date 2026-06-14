@@ -19,12 +19,10 @@ def render(df, df_camp):
     total_purchases= df['Purchases'].sum()
     avg_ctr        = total_clicks / total_impr * 100 if total_impr > 0 else 0
 
-    currency_raw = df['Currency_raw'].iloc[0] if len(df) > 0 else 'VND'
-    if 'THB' in str(currency_raw).upper():
-        st.markdown(
-            f'<div class="info-banner">💱 Đã quy đổi THB → VNĐ: 1 THB = {THB_TO_VND:,} VNĐ</div>',
-            unsafe_allow_html=True,
-        )
+    st.markdown(
+        f'<div class="info-banner">💱 Cost & GMV đã quy đổi: 1 THB = {THB_TO_VND:,} VNĐ</div>',
+        unsafe_allow_html=True,
+    )
 
     c1, c2, c3, c4, c5 = st.columns(5)
     c1.metric("Total Spend",    fmt_vnd(total_spend))
